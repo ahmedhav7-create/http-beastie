@@ -7,6 +7,8 @@ http::response<http::string_body> handle_request(const http::request<http::strin
   http::response<http::string_body> res;
 
   res.version(req.version());
+  res.keep_alive(false);
+
   res.set(http::field::server, "http-beastie");
   res.set(http::field::content_type, "text/html");
 

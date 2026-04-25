@@ -12,13 +12,13 @@ namespace net = boost::asio;
 using tcp = net::ip::tcp;
 
 int main() {
-  try {
-    net::io_context ioc;
-    tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), 8080));
+  net::io_context ioc;
+  tcp::acceptor acceptor(ioc, tcp::endpoint(tcp::v4(), 8080));
 
-    std::cout << "Listening on http://localhost:8080\n";
+  std::cout << "Listening on http://localhost:8080\n";
 
-    while (true) {
+  while (true) {
+    try {
       tcp::socket socket(ioc);
       acceptor.accept(socket);
 
@@ -29,10 +29,9 @@ int main() {
       auto res = handle_request(req);
       http::write(socket, res);
 
-      beast::error_code ec;
-      socket.shutdown(tcp::socket::shutdown_send, ec);
+      socket.shutdown(tcp::socket::shutdown_send);
+    } catch (const beast::system_error& e) {
+      std::cerr << "Error: " << e.what() << '\n';
     }
-  } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << '\n';
   }
 }
