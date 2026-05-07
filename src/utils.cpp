@@ -30,10 +30,9 @@ using namespace std;
   res.set(http::field::content_type, "text/html");
 
   if (req.method() == http::verb::get) {
-    if (req.target() == "/") {
+    if (req.target() == "/" || req.target() == "/kamel") {
       res.result(http::status::ok);
-      res.body() = "<h1 style=\"text-align: center;\">CSCE 1102</h1>";
-      read_file("static/index.html");
+      res.body() = read_file("static/kamel.html");
     } else {
       res.result(http::status::not_found);
       res.body() = "<h1 style=\"text-align: center;\">404 Not Found</h1>";
