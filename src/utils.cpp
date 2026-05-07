@@ -1,9 +1,26 @@
 #include "utils.hpp"
+#include <fstream>
+#include <sstream>
 
 namespace beast = boost::beast;
 namespace http = beast::http;
+using namespace std;
 
-http::response<http::string_body> handle_request(const http::request<http::string_body>& req) {
+  string read_file(string path) {
+
+    ifstream file(path, ios::in);
+
+    if (!file.is_open()) {
+        return "not opened";
+    }
+
+    stringstream buffer;
+    buffer << file.rdbuf();
+
+    return buffer.str();
+}
+
+  http::response<http::string_body> handle_request(const http::request<http::string_body>& req) {
   http::response<http::string_body> res;
 
   res.version(req.version());
